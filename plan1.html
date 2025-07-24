@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choose Network</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0.7cm;
+      background-color: #0a0a1a;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.6em;
+      margin-bottom: 0.3em;
+      color: #ffffff;
+    }
+
+    p {
+      font-size: 1em;
+      margin-bottom: 2em;
+      color: #bbbbbb;
+    }
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container a img {
+      max-width: 100%;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 0;
+      display: block;
+      height: auto;
+    }
+
+    @media (min-width: 600px) {
+      .image-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .image-container a {
+        flex: 1 1 calc(33.33% - 1.4cm);
+        max-width: calc(33.33% - 1.4cm);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose Your Preferred Network</h1>
+  <p>Select the blockchain network you want to use for sending or receiving USDT.</p>
+
+  <div class="image-container">
+    <a href="page1.html"><img src="plan1.png" alt="Network 1"></a>
+    <a href="page2.html"><img src="plan2.png" alt="Network 2"></a>
+    </div>
+</body>
+</html>

